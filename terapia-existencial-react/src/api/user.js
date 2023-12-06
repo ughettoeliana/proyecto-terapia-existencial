@@ -46,8 +46,6 @@ export const login = async (email, password) => {
 
 export const logout = async (authToken) => {
   try {
-    console.log('response', authToken)
-
     const response = await fetch(`${apiUrl}/session`, {
       method: "DELETE",
       headers: {
@@ -55,7 +53,6 @@ export const logout = async (authToken) => {
         "auth-token": authToken,
       },
     });
-    console.log('response', response)
     if (!response.ok) {
       throw new Error(`Failed to log out: ${response.status}`);
     }

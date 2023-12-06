@@ -35,8 +35,15 @@ async function verifyAccount(account) {
 
 async function createToken(payload) {
   try {
+    const accountData = await userSchema.findOne({ email: payload.email });
+    const userId = accountData._id.toString();
+    payload = {
+      ...payload,
+      userId
+    }
     const token = jwt.sign(payload, "CLAVE SECRETA");
-    await tokenSchema.create({ token, email: payload.email });
+
+    await tokenSchema.create({ token, email: payload.email, userId: payload.userId});
     return token;
   } catch (error) {
     console.log("error", error);

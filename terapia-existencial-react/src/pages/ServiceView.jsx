@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { getComments, submitComment } from "../api/feedbacks";
-import { getServices } from "../api/service";
+import { getServiceDetails, getServices } from "../api/service";
 
 function ServiceView() {
   //const [modalVisible, setModalVisible] = useState(false);
@@ -44,11 +44,14 @@ function ServiceView() {
     }
   };
 
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setServiceLoading(true);
-        const data = await getServices();
+        const data = await getServiceDetails(serviceId);
         setService(data);
         if (data) {
           showComments();
@@ -62,7 +65,7 @@ function ServiceView() {
         //setModalVisible(false);
       } catch (error) {
         console.error("Error in useEffect for fetching services:", error);
-        setPanelLoading(false);
+        setServiceLoading(false);
       }
     };
 
@@ -112,7 +115,6 @@ function ServiceView() {
       if (response) {
         showComments();
         setComment("");
-        console.log("Comentario enviado con éxito");
       } else {
         console.error("Error al enviar el comentario");
       }
@@ -122,7 +124,6 @@ function ServiceView() {
   };
 
   useEffect(() => {
-    console.log("serviceComments", serviceComments);
   }, [serviceComments]);
 
   return (

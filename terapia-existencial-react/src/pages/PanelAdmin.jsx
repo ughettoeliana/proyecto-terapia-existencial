@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PanelAdminNav from "../components/PanelAdminNav";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
-import { getServices } from "../api/service";
+import { deleteService, getServices } from "../api/service";
 
 const PanelAdmin = () => {
   const [deletingService, setDeletingService] = useState(false);
@@ -40,7 +40,7 @@ const PanelAdmin = () => {
       fetchData();
     }, []);
 
-  const deleteService = async (serviceId) => {
+  const handleDeleteService = async (serviceId) => {
     try {
       setDeletingService(true);
       await deleteService(serviceId);
@@ -130,7 +130,7 @@ const PanelAdmin = () => {
                               </button>
                               <button
                                 className="rounded-lg p-2 bg-red-500 text-white"
-                                onClick={() => deleteService(service._id)}
+                                onClick={() => handleDeleteService(service._id)}
                               >
                                 Si, eliminar
                               </button>
