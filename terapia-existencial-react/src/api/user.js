@@ -61,3 +61,24 @@ export const logout = async (authToken) => {
   }
 };
 
+export const getUserById = async (userId, authToken) => {
+  try {
+    const response = await fetch(`${apiUrl}/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": authToken,
+      },
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      return result
+    } else {
+      console.error("Get user by id failed");
+    }
+  } catch (error) {
+    console.error("Error in API getUserById function:", error);
+  }
+};
+

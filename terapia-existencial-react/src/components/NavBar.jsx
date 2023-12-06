@@ -1,19 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BaseNavLi from "./BaseNavLi";
-import { logout } from "../api/user.js";
+import { getUserById, logout } from "../api/user.js";
+import { jwtDecode } from "jwt-decode";
 
 const NavBar = () => {
-  //const [user, setUser] = useState({ id: null, email: null, rol: null });
+  const [user, setUser] = useState({ id: null, email: null, rol: null });
   const [isLoggedUser, setIsLoggedUser] = useState(false);
   const authToken = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoggedUser(!!authToken);
+
+    if (authToken) {
+      const tokenData = jwtDecode(authToken);
+      if (tokenData && tokenData.userId) {
+        setUser({
+          id: tokenData.userId,
+        });
+      } else {
+        setUser({
+          id: null,
+          email: null,
+          rol: null,
+        });
+      }
+    } else {
+      setUser({
+        id: null,
+        email: null,
+        rol: null,
+      });
+    }
   }, [authToken]);
 
-  
+  async function getUserData(user) {
+    try {
+      if (user.id) {
+        const userData = await getUserById(user.id, authToken);
+        console.log("userData", userData);
+        setUser({
+          id: userData.data._id,
+          email: userData.data.email,
+          rol: userData.data.rol
+        })
+        console.log("user", user);
+      } else {
+        console.log("User ID is null");
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (isLoggedUser) {
+      getUserData(user);
+    }
+  }, [isLoggedUser]);
+
   const handleLogout = async () => {
     try {
       await logout(authToken);
@@ -45,16 +92,16 @@ const NavBar = () => {
               </Link>
             </BaseNavLi>
           </div>
-          {isLoggedUser && isLoggedUser.rol && (
+          {user && user.rol && (
             <>
-              {isLoggedUser.rol === "admin" && (
+              {user.rol === "admin" && (
                 <BaseNavLi>
                   <Link to="/panel" className="text-gray-500">
                     Panel Administrador
                   </Link>
                 </BaseNavLi>
               )}
-              {isLoggedUser.rol === "user" && (
+              {user.rol === "user" && (
                 <BaseNavLi>
                   <Link to="/perfil" className="text-gray-500">
                     Mi Perfil
