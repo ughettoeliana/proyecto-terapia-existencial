@@ -19,9 +19,9 @@ function Login() {
   const handleFormSubmit = async (e) => {
     try {
       e.preventDefault();
-      navigate("/servicios", { replace: true });
       const result = await login(email, password, navigate);
       localStorage.setItem("token", result.token);
+      navigate("/services", { replace: true });
     } catch (error) {
       console.log("error", error);
     }

@@ -5,7 +5,7 @@ import { validateAccount, verifySession } from "../middlewares/account.js";
 
 const route = express.Router();
 
-route.use('/users', [verifySession])
+// route.use('/users', [verifySession])
 /// registro
 route.post("/account", [validateAccount], accountController.createAccount);
 /// login

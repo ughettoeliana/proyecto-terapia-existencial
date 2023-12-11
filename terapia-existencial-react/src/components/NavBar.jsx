@@ -9,12 +9,17 @@ const NavBar = () => {
   const [isLoggedUser, setIsLoggedUser] = useState(false);
   const authToken = localStorage.getItem("token");
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     setIsLoggedUser(!!authToken);
 
+
     if (authToken) {
       const tokenData = jwtDecode(authToken);
+      if (authToken === undefined) {
+        console.log('authToken es undefined')
+      }
+
       if (tokenData && tokenData.userId) {
         setUser({
           id: tokenData.userId,
@@ -39,17 +44,14 @@ const NavBar = () => {
     try {
       if (user.id) {
         const userData = await getUserById(user.id, authToken);
-        console.log("userData", userData);
         setUser({
           id: userData.data._id,
           email: userData.data.email,
-          rol: userData.data.rol
-        })
-        console.log("user", user);
+          rol: userData.data.rol,
+        });
       } else {
         console.log("User ID is null");
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +68,7 @@ const NavBar = () => {
       await logout(authToken);
       setIsLoggedUser(false);
       localStorage.removeItem("token");
-      navigate("/iniciar-sesion", { replace: true });
+      navigate("/login", { replace: true });
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +81,7 @@ const NavBar = () => {
           <div className="px-2 text-xl">
             <img src="/logo.svg" alt="Logo" width="30" height="24" />
           </div>
-          <Link to="/" className="text-lg">
+          <Link to="/home" className="text-lg">
             Consultoría Psicológica
           </Link>
         </div>
@@ -103,7 +105,7 @@ const NavBar = () => {
               )}
               {user.rol === "user" && (
                 <BaseNavLi>
-                  <Link to="/perfil" className="text-gray-500">
+                  <Link to="/my-profile" className="text-gray-500">
                     Mi Perfil
                   </Link>
                 </BaseNavLi>
@@ -115,7 +117,7 @@ const NavBar = () => {
             <>
               <BaseNavLi>
                 <Link
-                  to="/iniciar-sesion"
+                  to="/login"
                   className="text-darkBlue font-medium bg-lightBlue p-2 rounded-lg border border-solid border-lightBlue hover:border-primary"
                 >
                   Iniciar sesión
@@ -123,7 +125,7 @@ const NavBar = () => {
               </BaseNavLi>
               <BaseNavLi>
                 <Link
-                  to="/registro"
+                  to="/register"
                   className="text-darkBlue font-medium p-2 rounded-lg bg-lighterBlue hover:bg-lightBlue"
                 >
                   Registro
@@ -133,7 +135,7 @@ const NavBar = () => {
           ) : (
             <>
               <BaseNavLi>
-                <Link to="/servicios" className="text-gray-500">
+                <Link to="/services" className="text-gray-500">
                   Servicios
                 </Link>
               </BaseNavLi>

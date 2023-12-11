@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Services from "./pages/Services";
@@ -12,28 +13,68 @@ import Register from "./pages/Register";
 import PanelAdmin from "./pages/PanelAdmin";
 import CreateService from "./pages/CreateNewService";
 import EditService from "./pages/EditService";
-//import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
+import AdminPrivateRoute from "./components/AdminPrivateRoute";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
   return (
     <div>
-        <NavBar/>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/not-found" element={<NotFound />} />
-          <Route path="/about" element={<AboutMe />} />
-          <Route path="/iniciar-sesion" element={<Login />} />
-          <Route path="/registro" element={<Register />} />
-          <Route path="/servicios" element={<Services />} />
-          {/* <Route path="/servicios/seleccionar-fecha" element={<SelectDate />} /> */}
-          <Route path="/servicios/:serviceId" element={<ServiceView />} />
-          <Route path="/panel" element={<PanelAdmin />} />
-          <Route path="/create-service" element={<CreateService />} />
-          <Route path="/edit-service/:serviceId" element={<EditService />} />
-        </Routes>
-        <Footer/>
+      <NavBar />
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/not-found" element={<NotFound />} />
+        <Route path="/about" element={<AboutMe />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/services"
+          element={
+            <PrivateRoute>
+              <Services />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/services/:serviceId"
+          element={
+            <PrivateRoute>
+              <ServiceView />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/panel"
+          element={
+            <AdminPrivateRoute>
+              <PanelAdmin />
+            </AdminPrivateRoute>
+          }
+        />
+        <Route
+          path="/create-service"
+          element={
+            <AdminPrivateRoute>
+              <CreateService />
+            </AdminPrivateRoute>
+          }
+        />
+        <Route
+          path="/edit-service/:serviceId"
+          element={
+            <AdminPrivateRoute>
+              <EditService />
+            </AdminPrivateRoute>
+          }
+        />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/*" element={<NotFound/>} />
+      </Routes>
+      <Footer />
     </div>
   );
 }
 
- export default App;
+export default App;

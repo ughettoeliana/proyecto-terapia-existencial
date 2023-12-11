@@ -1,5 +1,35 @@
 const apiUrl = "http://localhost:3000/api";
 
+export const getServices = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/services`, {
+      method: "GET",
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data.data;
+    } else if (response.status === 401) {
+      return response.status;
+    }
+
+
+    // if (!response.ok) {
+    //   throw new Error(
+    //     `Failed to fetch data: ${response.status} ${response.statusText}`
+    //   );
+    // }
+
+    // const data = await response.json();
+    // return data.data;
+  } catch (error) {
+    console.error("Error in API fetchServices function:", error);
+    throw error;
+  }
+};
+
 export const createNewService = async (formData) => {
   try {
     const response = await fetch(`${apiUrl}/services`, {
@@ -66,25 +96,3 @@ export const deleteService = async (serviceId) => {
   }
 };
 
-export const getServices = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/services`, {
-      method: "GET",
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch data: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error in API fetchServices function:", error);
-    throw error;
-  }
-};

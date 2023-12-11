@@ -74,7 +74,7 @@ function ServiceView() {
 
   const handleScheduleAppointment = async (service) => {
     const serviceId = service._id;
-    navigate(`/servicios/${serviceId}`);
+    navigate(`/services/${serviceId}`);
   };
 
   const toggleEditMode = () => {

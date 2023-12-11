@@ -20,7 +20,7 @@ function Register() {
     e.preventDefault();
     try {
       const result = await createAccount(email, password);
-      navigate("/iniciar-sesion", { replace: true });
+      navigate("/login", { replace: true });
       localStorage.setItem("token", result.token);
     } catch (error) {
       console.log(error);

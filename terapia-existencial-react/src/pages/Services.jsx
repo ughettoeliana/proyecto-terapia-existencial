@@ -20,11 +20,13 @@ function Services() {
         if (data) {
           setServices(data);
           setServicesLoading(false);
+        }else {
+          navigate('/iniciar-sesion',{replace: true})
         }
       } catch (error) {
         console.error("Error in useEffect for fetching services:", error);
         setServicesLoading(false);
-        navigate('/not-found')
+        navigate('/not-found',{replace: true})
       }
     };
   
@@ -33,7 +35,7 @@ function Services() {
 
   const handleRedirect = async (service) => {
     const serviceId = service._id.replace(/^"|"$/g, "");
-    navigate(`/servicios/${serviceId}`);
+    navigate(`/services/${serviceId}`,{replace: true});
   };
 
   return (

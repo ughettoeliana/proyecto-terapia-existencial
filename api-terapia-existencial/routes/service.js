@@ -5,7 +5,7 @@ import { verifySession } from "../middlewares/account.js";
 const route = express.Router();
 
 //CRUD of the services
-
+//route.use('/services', [verifySession])
 
  route.post('/services', [validateCreateService], serviceController.createService)
  route.get('/services',serviceController.getServices)
