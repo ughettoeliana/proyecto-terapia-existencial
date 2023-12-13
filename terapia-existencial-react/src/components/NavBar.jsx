@@ -105,7 +105,7 @@ const NavBar = () => {
               )}
               {user.rol === "user" && (
                 <BaseNavLi>
-                  <Link to="/my-profile" className="text-gray-500">
+                  <Link to="/profile" className="text-gray-500">
                     Mi Perfil
                   </Link>
                 </BaseNavLi>

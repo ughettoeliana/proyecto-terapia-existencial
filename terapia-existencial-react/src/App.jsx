@@ -16,6 +16,7 @@ import EditService from "./pages/EditService";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import Unauthorized from "./pages/Unauthorized";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/services"
           element={
