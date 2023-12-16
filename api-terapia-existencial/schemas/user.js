@@ -13,6 +13,12 @@ const UserSchema = mongoose.Schema({
     rol: {
         type: String,
         default: 'user' 
+    },
+    fullName: {
+        type: String,
+    },
+    bio: {
+        type: String,
     }
 })
 

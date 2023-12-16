@@ -77,8 +77,8 @@ const EditService = () => {
       <h1 className="text-xl">Editar el servicio</h1>
       <PanelAdminNav />
 
-      <div className="">
-        <form onSubmit={handleEditService} className="">
+      <div>
+        <form onSubmit={handleEditService}>
           <div className="flex flex-col">
             <label htmlFor="name">Nombre</label>
             <BaseInput

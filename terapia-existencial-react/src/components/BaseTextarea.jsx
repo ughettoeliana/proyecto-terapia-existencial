@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 function BaseTextarea({ modelValue, onUpdateModelValue }) {
   const [value, setValue] = useState(modelValue);
+  //const [onUpdateValue, onUpdateModelValue] = useState(modelValue);
 
   const handleInput = (event) => {
     const newValue = event.target.value;
     setValue(newValue);
-    onUpdateModelValue(newValue);
+    //onUpdateModelValue(newValue);
   };
 
   return (

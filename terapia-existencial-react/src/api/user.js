@@ -1,48 +1,45 @@
-
 const apiUrl = "http://localhost:3000/api";
 
 export const login = async (email, password) => {
-    try {
-      const response = await fetch(`${apiUrl}/session`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      if (response.ok) {
-        const result = await response.json();
-        return result
-      } else {
-        console.error("Login failed");
-      }
-    } catch (error) {
-      console.error("Error in API login function:", error);
+  try {
+    const response = await fetch(`${apiUrl}/session`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      console.error("Login failed");
     }
-  };
+  } catch (error) {
+    console.error("Error in API login function:", error);
+  }
+};
 
+export const createAccount = async (email, password) => {
+  try {
+    const response = await fetch(`${apiUrl}/account`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-  export const createAccount = async (email, password) => {
-    try {
-      const response = await fetch(`${apiUrl}/account`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        return result
-      } else {
-        console.error("Account creation failed");
-      }
-    } catch (error) {
-      console.error("Error in API createAccount function:", error);
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      console.error("Account creation failed");
     }
-  };
-
+  } catch (error) {
+    console.error("Error in API createAccount function:", error);
+  }
+};
 
 export const logout = async (authToken) => {
   try {
@@ -70,10 +67,10 @@ export const getUserById = async (userId, authToken) => {
         "auth-token": authToken,
       },
     });
-    
+
     if (response.ok) {
       const result = await response.json();
-      return result
+      return result;
     } else {
       console.error("Get user by id failed");
     }
@@ -82,3 +79,28 @@ export const getUserById = async (userId, authToken) => {
   }
 };
 
+export const updateUser = async (editedUser, userId) => {
+  try {
+    const response = await fetch(`${apiUrl}/user/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedUser),
+    });
+    // console.log("editedUser", editedUser);
+    // console.log("userId", userId);
+    // console.log("Response:", response); // Log the response
+
+    // if (response.ok) {
+    //   const updatedUserData = await response.json();
+    //   console.log("updatedUserData", updatedUserData);
+    //   return updatedUserData;
+    // } else {
+    //   console.error("Update user by id failed");
+    //   console.error("result", response);
+    //}
+  } catch (error) {
+    console.error("Error in API getUserById function:", error);
+  }
+};

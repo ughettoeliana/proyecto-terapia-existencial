@@ -29,11 +29,11 @@ const getUserById = async (id) => {
   }
 };
 
-const updateUser = async (id, { email, password }) => {
+const updateUser = async (id, { email, password, rol, fullName, bio}) => {
   try {
     const updateUser = await userSchema.updateOne(
       { _id: id },
-      { $set:  { email, password, rol }}
+      { $set:  { email, password, rol, fullName, bio }}
     );
     return updateUser;
   } catch (error) {

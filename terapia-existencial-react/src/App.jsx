@@ -17,6 +17,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import Unauthorized from "./pages/Unauthorized";
 import Profile from "./pages/Profile";
+import SetAppoinment from "./pages/SetAppoinment";
 
 function App() {
   return (
@@ -53,7 +54,14 @@ function App() {
             </PrivateRoute>
           }
         />
-
+        <Route
+          path="/services/:serviceId/set-appoinment"
+          element={
+            <PrivateRoute>
+              <SetAppoinment />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/panel"
           element={
@@ -79,7 +87,7 @@ function App() {
           }
         />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/*" element={<NotFound/>} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>

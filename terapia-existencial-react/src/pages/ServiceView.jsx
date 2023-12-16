@@ -12,7 +12,6 @@ function ServiceView() {
   //const [modalVisible, setModalVisible] = useState(false);
   const [service, setService] = useState([]);
   const [serviceLoading, setServiceLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState();
   const [comment, setComment] = useState("");
   const [serviceComments, setServiceComments] = useState([]);
   const { serviceId } = useParams();
@@ -74,7 +73,8 @@ function ServiceView() {
 
   const handleScheduleAppointment = async (service) => {
     const serviceId = service._id;
-    navigate(`/services/${serviceId}`);
+    navigate(`/services/${serviceId}/set-appoinment`, {replace: true})
+
   };
 
   const toggleEditMode = () => {
@@ -126,6 +126,7 @@ function ServiceView() {
   useEffect(() => {
   }, [serviceComments]);
 
+
   return (
     <div>
       {serviceLoading && <Loader />}
@@ -152,7 +153,6 @@ function ServiceView() {
                 <div className="flex justify-between mt-4">
                   <BaseButton
                     onClick={() => handleScheduleAppointment(service)}
-                    className=""
                     btnText="Agendar Cita"
                   />
                   <BaseButton

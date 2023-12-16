@@ -6,7 +6,11 @@ const createFeedback = async (req, res) => {
   try {
     const feedbackData = req.body;
     const accountData = await userSchema.findOne({ email: feedbackData.email });
-    const data = { userId: accountData._id.toString(), serviceId: feedbackData.serviceId, comment: feedbackData.comment}
+    const data = {
+      userId: accountData._id.toString(),
+      serviceId: feedbackData.serviceId,
+      comment: feedbackData.comment,
+    };
     const createdFeedback = await feedbackServices.createFeedback(data);
     res.status(201).json({ data: createdFeedback });
   } catch (error) {
@@ -39,15 +43,16 @@ const getFeedbackById = async (req, res) => {
   }
 };
 
-
 const getFeedbackByServiceId = async (req, res) => {
   const { serviceId } = req.params;
   try {
-    const foundFeedbacks = await feedbackServices.getFeedbackByServiceId(serviceId);
+    const foundFeedbacks = await feedbackServices.getFeedbackByServiceId(
+      serviceId
+    );
     return res.status(200).json({ data: foundFeedbacks });
   } catch (error) {
-    console.error('Error al obtener comentarios por ID de servicio:', error);
-    return res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al obtener comentarios por ID de servicio:", error);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
@@ -86,5 +91,5 @@ export default {
   getFeedbackById,
   updateFeedback,
   deleteFeedback,
-  getFeedbackByServiceId
+  getFeedbackByServiceId,
 };
