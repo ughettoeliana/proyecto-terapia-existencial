@@ -63,6 +63,7 @@ function Services() {
                             {service.time}
                           </p>
                           <p>$ {service.price}</p>
+                          <p><span className="font-semibold">Modalidad:</span> {service.modality}</p>
                           <p className="py-2">
                             Agenda una sesión con el consultor Daniel del Valle
                           </p>

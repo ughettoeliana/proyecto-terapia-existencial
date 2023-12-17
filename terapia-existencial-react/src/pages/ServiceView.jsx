@@ -145,6 +145,7 @@ function ServiceView() {
                   Duración: {service.time} hs.
                 </p>
                 <p>Precio: ${service.price}usd</p>
+                <p>Modalidad: {service.modality}</p>
                 <p className="py-2">
                   Agenda una sesión con el consultor Daniel del Valle
                 </p>
