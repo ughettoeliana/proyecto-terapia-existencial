@@ -13,10 +13,9 @@ import { getServiceDetails } from "../api/service";
 function Appointments({ user }) {
   const [appointmentsLoading, setAppointmentsLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
-  const [serviceData, setServiceData] = useState([]);
 
   useEffect(() => {
-    const fetchAppointmentData = async () => {
+    const fetchData = async () => {
       try {
         if (!user || !user.id) {
           setAppointmentsLoading(false);
@@ -24,39 +23,39 @@ function Appointments({ user }) {
         }
 
         const foundAppointments = await getAppointmentByUserId(user.id);
-        setAppointments(foundAppointments);
+
+        const appointmentsWithServiceData = await Promise.all(
+          foundAppointments.map(async (appointment) => {
+            if (appointment.serviceId) {
+              const serviceData = await getServiceDetails(
+                appointment.serviceId
+              );
+              return {
+                date: appointment.appointmentData.date,
+                time: appointment.appointmentData.time,
+                name: serviceData.name,
+                duration: serviceData.time,
+                price: serviceData.price,
+                modality: serviceData.modality,
+                serviceId: serviceData._id,
+              };
+            } else {
+              return null;
+            }
+          })
+        );
+
+        setAppointments(appointmentsWithServiceData.filter(Boolean));
         setAppointmentsLoading(false);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching data:", error);
         setAppointmentsLoading(false);
       }
     };
 
-    fetchAppointmentData();
+    fetchData();
   }, [user]);
 
-  useEffect(() => {
-    const fetchServiceData = async () => {
-      try {
-        const serviceDataPromises = appointments.map(async (appointment) => {
-          if (appointment.serviceId) {
-            return await getServiceDetails(appointment.serviceId);
-          }
-          return null;
-        });
-
-        const serviceData = await Promise.all(serviceDataPromises);
-        setServiceData(serviceData);
-      } catch (error) {
-        console.error("Error in useEffect for fetching services:", error);
-        setAppointmentsLoading(false);
-      }
-    };
-
-    fetchServiceData();
-  }, [appointments]);
-
-  console.log("appoiments", appointments);
 
   return (
     <div className="mx-5">
@@ -65,36 +64,31 @@ function Appointments({ user }) {
         <div>
           {appointments.map((appointment) => (
             <div
-              key={appointment._id}
-              className="p-5 flex flex-col rounded-xl border border-solid border-slate-200"
+              key={appointment.serviceId}
+              className="p-5 flex flex-col rounded-xl border border-solid border-slate-200 m-4"
             >
               <div>
-                {serviceData.map((service) => (
-                  <div key={service._id}>
-                    <h2 className="text-darkBlue text-xl font-semibold">
-                      {service.name}
-                    </h2>
-                    <p>
-                      <i
-                        className="fa-solid fa-clock"
-                        style={{ color: "#21496b" }}
-                      ></i>
-                      {service.time}
-                    </p>
-                    <p>$ {service.price}</p>
-                  </div>
-                ))}
-
+                <h2 className="text-darkBlue text-xl font-semibold">
+                  {appointment.name}
+                </h2>
+                <p>
+                  <i
+                    className="fa-solid fa-clock"
+                    style={{ color: "#21496b" }}
+                  ></i>
+                  {appointment.duration}
+                </p>
+                <p>$ {appointment.price}</p>
                 <p>
                   Fecha:
                   <span className="font-semibold">
-                    {appointment.appointmentData.date}
+                    {appointment.date}
                   </span>
                 </p>
                 <p>
                   Hora:
                   <span className="font-semibold">
-                    {appointment.appointmentData.time}
+                    {appointment.time}
                   </span>
                 </p>
                 <p className="py-2">
