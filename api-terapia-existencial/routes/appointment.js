@@ -1,19 +1,19 @@
 import express from "express";
-import appoinmentController from "../controllers/appoinment.js";
-import { validateCreateAppoinment } from "../middlewares/appoinment.js";
+import appointmentController from "../controllers/appointment.js";
+import { validateCreateAppointment } from "../middlewares/appointment.js";
 const route = express.Router();
 
 //CRUD of the feedback
 
 route.post(
-  "/appoinment",
-  [validateCreateAppoinment],
-  appoinmentController.createAppoinment
+  "/appointment",
+  [validateCreateAppointment],
+  appointmentController.createAppointment
 );
-route.get("/appoinments", appoinmentController.getAppoinment);
-route.get('/appoinments/:userId', appoinmentController.getAppoinmentByUserId)
+route.get("/appointments", appointmentController.getAppointment);
+route.get('/appointments/:userId', appointmentController.getAppointmentByUserId)
 
-route.delete('/appoinment/:id', appoinmentController.deleteAppoinment)
+route.delete('/appointment/:id', appointmentController.deleteAppointment)
 
 //trae un comentario por id
 //route.get('/feedback/:id', feedbackController.getFeedbackById)

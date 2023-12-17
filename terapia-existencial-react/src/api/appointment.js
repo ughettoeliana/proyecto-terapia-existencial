@@ -1,8 +1,8 @@
 const apiUrl = "http://localhost:3000/api";
 
-export const createAppoinment = async (userId, serviceId, appoinmentData) => {
+export const createAppointment = async (userId, serviceId, appointmentData) => {
   try {
-    const response = await fetch(`${apiUrl}/appoinment`, {
+    const response = await fetch(`${apiUrl}/appointment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -10,16 +10,16 @@ export const createAppoinment = async (userId, serviceId, appoinmentData) => {
       body: JSON.stringify({
         userId,
         serviceId,
-        appoinmentData,
+        appointmentData,
       }),
     });
     console.log(
       JSON.stringify({
         userId,
         serviceId,
-        appoinmentData: {
-          date: appoinmentData.date,
-          time: appoinmentData.time,
+        appointmentData: {
+          date: appointmentData.date,
+          time: appointmentData.time,
         },
       })
     );
@@ -27,18 +27,18 @@ export const createAppoinment = async (userId, serviceId, appoinmentData) => {
       const result = await response.json();
       return result;
     } else {
-      console.error("Appoinment creation failed");
+      console.error("Appointment creation failed");
     }
   } catch (error) {
-    console.error("Error in API createAppoinment function:", error);
+    console.error("Error in API createAppointment function:", error);
   }
 };
 
 
 
-export const getAppoinmentByUserId = async (userId) => {
+export const getAppointmentByUserId = async (userId) => {
     try {
-      const response = await fetch(`${apiUrl}/appoinments/${userId}`, {
+      const response = await fetch(`${apiUrl}/appointments/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

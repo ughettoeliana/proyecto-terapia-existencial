@@ -17,7 +17,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import Unauthorized from "./pages/Unauthorized";
 import Profile from "./pages/Profile";
-import SetAppoinment from "./pages/SetAppoinment";
+import SetAppointment from "./pages/SetAppointment";
 
 function App() {
   return (
@@ -55,10 +55,10 @@ function App() {
           }
         />
         <Route
-          path="/services/:serviceId/set-appoinment"
+          path="/services/:serviceId/set-appointment"
           element={
             <PrivateRoute>
-              <SetAppoinment />
+              <SetAppointment />
             </PrivateRoute>
           }
         />

@@ -61,7 +61,7 @@ function ServiceView() {
 
   const handleScheduleAppointment = async (service) => {
     const serviceId = service._id;
-    navigate(`/services/${serviceId}/set-appoinment`, {replace: true})
+    navigate(`/services/${serviceId}/set-appointment`, {replace: true})
 
   };
 

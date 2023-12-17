@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AppoinmentSchema = mongoose.Schema({
+const AppointmentSchema = mongoose.Schema({
   userId: {
     type: String,
     required: true,
@@ -9,7 +9,7 @@ const AppoinmentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  appoinmentData: {
+  appointmentData: {
     date: {
       type: String,
       required: true,
@@ -21,6 +21,6 @@ const AppoinmentSchema = mongoose.Schema({
   },
 });
 
-const appoinmentSchema = mongoose.model("Appoinment", AppoinmentSchema);
+const appointmentSchema = mongoose.model("Appointment", AppointmentSchema);
 
-export default appoinmentSchema;
+export default appointmentSchema;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BaseButton from "../components/BaseButton";
-import { createAppoinment } from "../api/appoinment";
+import { createAppointment } from "../api/appointment";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -60,7 +60,7 @@ const DateTimePicker = ({ onDateChange, onTimeChange }) => {
   );
 };
 
-function SetAppoinment() {
+function SetAppointment() {
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationModalVisible, setNotificationModalVisible] =
     useState(false);
@@ -99,11 +99,11 @@ function SetAppoinment() {
 
   async function confirmAppointment() {
     try {
-      const appoinmentData = {
+      const appointmentData = {
         date: selectedDate,
         time: selectedTime,
       };
-      await createAppoinment(userId, serviceId.serviceId, appoinmentData);
+      await createAppointment(userId, serviceId.serviceId, appointmentData);
 
       setModalVisible(false);
 
@@ -212,4 +212,4 @@ function SetAppoinment() {
   );
 }
 
-export default SetAppoinment;
+export default SetAppointment;
