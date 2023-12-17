@@ -14,7 +14,7 @@ const AppoinmentSchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    hour: {
+    time: {
       type: String,
       required: true,
     },

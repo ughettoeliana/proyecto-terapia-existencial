@@ -17,6 +17,15 @@ const getAppoinment = async () => {
   } catch (error) {
     throw error;
   }
+}
+
+const getAppoinmentByUserId = async (userId) => {
+  try {
+    const foundAppoinment = await appoinmentSchema.find({ userId: userId });
+    return foundAppoinment;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const deleteAppoinment = async (id) => {
@@ -28,4 +37,4 @@ const deleteAppoinment = async (id) => {
     }
   };
 
-export default { createAppoinment, getAppoinment, deleteAppoinment};
+export default { createAppoinment, getAppoinment, deleteAppoinment, getAppoinmentByUserId};

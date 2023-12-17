@@ -11,6 +11,8 @@ route.post(
   appoinmentController.createAppoinment
 );
 route.get("/appoinments", appoinmentController.getAppoinment);
+route.get('/appoinments/:userId', appoinmentController.getAppoinmentByUserId)
+
 route.delete('/appoinment/:id', appoinmentController.deleteAppoinment)
 
 //trae un comentario por id

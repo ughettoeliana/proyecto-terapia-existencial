@@ -88,18 +88,15 @@ export const updateUser = async (editedUser, userId) => {
       },
       body: JSON.stringify(editedUser),
     });
-    // console.log("editedUser", editedUser);
-    // console.log("userId", userId);
-    // console.log("Response:", response); // Log the response
 
-    // if (response.ok) {
-    //   const updatedUserData = await response.json();
-    //   console.log("updatedUserData", updatedUserData);
-    //   return updatedUserData;
-    // } else {
-    //   console.error("Update user by id failed");
-    //   console.error("result", response);
-    //}
+    if (response.ok) {
+      const updatedUserData = await response.json();
+      console.log("updatedUserData", updatedUserData);
+      return updatedUserData;
+    } else {
+      console.error("Update user by id failed");
+      console.error("result", response);
+    }
   } catch (error) {
     console.error("Error in API getUserById function:", error);
   }

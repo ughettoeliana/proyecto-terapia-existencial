@@ -18,18 +18,6 @@ function ServiceView() {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
 
-  // const showModal = (service) => {
-  //   setSelectedService(service);
-  //   setModalVisible(true);
-  // };
-
-  // const closeModal = () => {
-  //   setModalVisible(false);
-  //   setSelectedService(null);
-  // };
-
-  
-
 
   const showComments = async () => {
     try {

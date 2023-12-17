@@ -9,7 +9,7 @@ const createAppoinment = async (req, res) => {
       serviceId: serviceId,
       appoinmentData: {
         date: appoinmentData.date,
-        hour: appoinmentData.hour,
+        time: appoinmentData.time,
       },
     };
     const createdAppoinment = await appoinmentServices.createAppoinment(data);
@@ -32,6 +32,21 @@ const getAppoinment = async (req, res) => {
     }
   };
 
+
+const getAppoinmentByUserId = async (req, res) => {
+    try {
+      const {userId} = req.params;
+      const foundAppoinments = await appoinmentServices.getAppoinmentByUserId(userId);
+      res.status(201).json({ data: foundAppoinments });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ msg: "Error al traer la cita", error: error.message });
+    }
+  };
+
+
+
   const deleteAppoinment = async (req, res) => {
     try {
       const { id } = req.params;
@@ -45,4 +60,4 @@ const getAppoinment = async (req, res) => {
   };
 
 
-export default { createAppoinment, getAppoinment, deleteAppoinment };
+export default { createAppoinment, getAppoinment, getAppoinmentByUserId,deleteAppoinment };

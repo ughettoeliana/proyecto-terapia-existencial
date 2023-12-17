@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import BaseButton from "../components/BaseButton";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
+import { createAppoinment } from "../api/appoinment";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
-const DateTimePicker = () => {
+const DateTimePicker = ({ onDateChange, onTimeChange }) => {
   const [selectedDate, setSelectedDate] = useState({ date: "" });
   const [selectedTime, setSelectedTime] = useState({ hour: "" });
 
   const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
+    const date = e.target.value;
+    setSelectedDate(date);
+    onDateChange(date);
   };
 
   const handleTimeChange = (e) => {
-    setSelectedTime(e.target.value);
+    const time = e.target.value;
+    setSelectedTime(time);
+    onTimeChange(time);
   };
 
   const timeOptions = [];
@@ -30,10 +28,6 @@ const DateTimePicker = () => {
       timeOptions.push(`${formattedHour}:${formattedMinute}`);
     }
   }
-
-
-  console.log("selectedDate", selectedDate);
-  console.log("selectedTime", selectedTime);
 
   return (
     <>
@@ -50,22 +44,16 @@ const DateTimePicker = () => {
         <div>
           <label>Hora: </label>
           <select
-          value={selectedTime}
-          onChange={handleTimeChange}
-          className="border border-solid border-gray-300 rounded-md p-1"
-        >
-          {timeOptions.map((time) => (
-            <option key={time} value={time}>
-              {time}
-            </option>
-          ))}
-        </select>
-          {/* <input
-            type="time"
             value={selectedTime}
             onChange={handleTimeChange}
             className="border border-solid border-gray-300 rounded-md p-1"
-          /> */}
+          >
+            {timeOptions.map((time) => (
+              <option key={time} value={time}>
+                {time}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </>
@@ -73,37 +61,100 @@ const DateTimePicker = () => {
 };
 
 function SetAppoinment() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [notificationModalVisible, setNotificationModalVisible] =
+    useState(false);
+  const [selectedDate, setSelectedDate] = useState({ date: "" });
+  const [selectedTime, setSelectedTime] = useState({ hour: "" });
+  const serviceId = useParams();
+  const navigate = useNavigate();
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null,
+  });
+
+  const authToken = localStorage.getItem("token");
+  if (!authToken) {
+    return <Navigate to={"/login"} replace={true} />;
+  }
+
+  const tokenData = jwtDecode(authToken);
+  const userId = tokenData.userId;
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+  };
+
+  function showModal() {
+    setModalVisible(true);
+  }
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  async function confirmAppointment() {
+    try {
+      const appoinmentData = {
+        date: selectedDate,
+        time: selectedTime,
+      };
+      await createAppoinment(userId, serviceId.serviceId, appoinmentData);
+
+      setModalVisible(false);
+
+      setNotification({
+        message: "Se agendó la cita con éxito",
+        type: "success",
+      });
+      setNotificationModalVisible(true);
+    } catch (error) {
+      setNotification({
+        message: "No se pudo agendar la cita, intentalo de nuevo",
+        type: "error",
+      });
+      setNotificationModalVisible(true);
+      console.error("Error en confirmAppointment:", error);
+    }
+  }
+
+  function goToServices() {
+    setNotificationModalVisible(false);
+    navigate("/services", { replace: true });
+  }
+
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center max-h-screen">
       <h1 className="text-2xl self-center p-3 ">Agenda una cita</h1>
       <div className="flex justify-center my-4">
         <div>
-          <DateTimePicker />
+          <DateTimePicker
+            onDateChange={handleDateChange}
+            onTimeChange={handleTimeChange}
+          />
         </div>
       </div>
       <div className="max-w-2xl text-center mx-auto py-5">
         <BaseButton
           btnText="Continuar"
-          //onClick={showModal}
+          onClick={showModal}
           className="w-full"
         />
       </div>
 
-      {/* {modalVisible && appointmentDateAndHour && (
+      {modalVisible && selectedTime && selectedDate && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded max-w-md text-xl">
             <h2>¿Estás seguro que quieres agendar la cita?</h2>
             <h3 className="mt-6">
-              El día:
-              <span className="font-semibold">
-                {appointmentDateAndHour.date}
-              </span>
+              El día: <span className="font-semibold">{selectedDate}</span>
             </h3>
             <h3 className="pt-3 pb-6 mb-8">
-              A las:
-              <span className="font-semibold">
-                {appointmentDateAndHour.hour} hs
-              </span>
+              A las: <span className="font-semibold">{selectedTime} hs</span>
             </h3>
             <div className="flex justify-around items-center my-4">
               <button
@@ -122,19 +173,41 @@ function SetAppoinment() {
             </div>
           </div>
         </div>
-      )} */}
-      {/* 
-      <div
-        className={`flex justify-around items-center max-w-lg text-center p-2 mx-auto text-md ${
-          notification.message !== null
-            ? notification.type === "success"
-              ? "text-green-500 bg-green-200 rounded-xl"
-              : "text-red-500 bg-red-200 rounded-xl"
-            : ""
-        }`}
-      >
-        {notification.message}
-      </div> */}
+      )}
+
+      {notificationModalVisible && notification && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div
+            className={` p-8 rounded max-w-md text-xl${
+              notification.message !== null
+                ? notification.type === "success"
+                  ? "text-green-500 bg-green-200 rounded-xl"
+                  : "text-red-500 bg-red-200 rounded-xl"
+                : ""
+            }`}
+          >
+            <div
+              className={`flex justify-around items-center max-w-lg text-center p-2 mx-auto text-lg ${
+                notification.message !== null
+                  ? notification.type === "success"
+                    ? "text-green-500 bg-green-200 rounded-xl"
+                    : "text-red-500 bg-red-200 rounded-xl"
+                  : ""
+              }`}
+            >
+              {notification.message}
+            </div>
+            <div className="flex justify-around items-center my-4">
+              <button
+                onClick={goToServices}
+                className="rounded-lg p-2 bg-green-500 text-white"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
