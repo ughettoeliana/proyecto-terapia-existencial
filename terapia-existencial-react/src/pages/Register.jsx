@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BaseButton from "../components/BaseButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createAccount, login } from "../api/user";
 
 function Register() {
@@ -19,7 +19,7 @@ function Register() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-       await createAccount(email, password);
+      await createAccount(email, password);
       const loggedUser = await login(email, password);
       localStorage.setItem("token", loggedUser.token);
       navigate("/services", { replace: true });
@@ -65,6 +65,13 @@ function Register() {
                   type="submit"
                   btnText="Iniciar Sesión"
                 />
+                <div className="mt-3">
+                  <p>
+                    ¿Ya tenés cuenta? <Link to="/login" className="text-primary">
+                      Inicia Sesión
+                    </Link>
+                  </p>
+                </div>
               </div>
             </form>
           </div>

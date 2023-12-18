@@ -58,16 +58,15 @@ function Login() {
                   className="border border-solid border-gray-300 rounded-md p-1"
                 />
               </div>
-              <div>
-                <p>¿No tenés cuenta?</p>
-                <Link to='/register' className="text-primary">Registrate</Link>
-              </div>
+              
               <div className="my-5">
                 <BaseButton
                   className="w-full"
                   type="submit"
                   btnText="Iniciar Sesión"
-                />
+                /><div className="mt-3">
+                <p>¿No tenés cuenta? <Link to='/register' className="text-primary">Registrate</Link></p>
+              </div>
               </div>
             </form>
           </div>
