@@ -57,5 +57,22 @@ export const getAppointmentByUserId = async (userId) => {
       return null;
     }
   };
+
+  export const deleteAppointment = async (appointmentId) => {
+    try {
+      const response = await fetch(`${apiUrl}/appointment/${appointmentId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to delete appointment with ID ${appointmentId}`);
+      }
+    } catch (error) {
+      console.error("Error during appointment deletion:", error);
+    }
+  };
   
   

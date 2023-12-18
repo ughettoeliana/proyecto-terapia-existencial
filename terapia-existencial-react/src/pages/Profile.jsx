@@ -1,62 +1,88 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../components/Loader";
 import BaseButton from "../components/BaseButton";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { getUserById, updateUser } from "../api/user";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { getAppointmentByUserId } from "../api/appointment.js";
+import {
+  deleteAppointment,
+  getAppointmentByUserId,
+} from "../api/appointment.js";
 import { getServiceDetails } from "../api/service";
 
 // Appointments component
 function Appointments({ user }) {
   const [appointmentsLoading, setAppointmentsLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [deletingAppointment, setDeletingAppointment] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!user || !user.id) {
-          setAppointmentsLoading(false);
-          return;
-        }
-
-        const foundAppointments = await getAppointmentByUserId(user.id);
-
-        const appointmentsWithServiceData = await Promise.all(
-          foundAppointments.map(async (appointment) => {
-            if (appointment.serviceId) {
-              const serviceData = await getServiceDetails(
-                appointment.serviceId
-              );
-              return {
-                date: appointment.appointmentData.date,
-                time: appointment.appointmentData.time,
-                name: serviceData.name,
-                duration: serviceData.time,
-                price: serviceData.price,
-                modality: serviceData.modality,
-                serviceId: serviceData._id,
-              };
-            } else {
-              return null;
-            }
-          })
-        );
-
-        setAppointments(appointmentsWithServiceData.filter(Boolean));
+  const fetchData = async () => {
+    try {
+      if (!user || !user.id) {
         setAppointmentsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setAppointmentsLoading(false);
+        return;
       }
-    };
 
+      const foundAppointments = await getAppointmentByUserId(user.id);
+
+      const appointmentsWithServiceData = await Promise.all(
+        foundAppointments.map(async (appointment) => {
+          if (appointment.serviceId) {
+            const serviceData = await getServiceDetails(appointment.serviceId);
+            return {
+              id: appointment._id,
+              userId: appointment.userId,
+              date: appointment.appointmentData.date,
+              time: appointment.appointmentData.time,
+              name: serviceData.name,
+              duration: serviceData.time,
+              price: serviceData.price,
+              modality: serviceData.modality,
+              serviceId: serviceData._id,
+            };
+          } else {
+            return null;
+          }
+        })
+      );
+      setAppointments(appointmentsWithServiceData.filter(Boolean));
+      setAppointmentsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setAppointmentsLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [user]);
 
+  const showModal = (service) => {
+    setSelectedAppointment(service);
+    setModalVisible(true);
+  };
 
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedAppointment(null);
+  };
+
+  const handleDeleteAppointment = async (appointmentId) => {
+    try {
+      setDeletingAppointment(true);
+      console.log("appointmentId", appointmentId);
+      await deleteAppointment(appointmentId);
+      setModalVisible(false);
+      fetchData();
+    } finally {
+      setDeletingAppointment(false);
+    }
+  };
+  console.log("selectedAppointment", selectedAppointment);
   return (
     <div className="mx-5">
       {appointmentsLoading && <Loader />}
@@ -72,31 +98,71 @@ function Appointments({ user }) {
                   {appointment.name}
                 </h2>
                 <p>
-                  <i
-                    className="fa-solid fa-clock"
+                  <FontAwesomeIcon
+                    icon={faClock}
                     style={{ color: "#21496b" }}
-                  ></i>
+                    className="mr-1"
+                  />
                   {appointment.duration}
                 </p>
                 <p>$ {appointment.price}</p>
+                <p> {appointment.modality}</p>
                 <p>
                   Fecha:
-                  <span className="font-semibold">
-                    {appointment.date}
-                  </span>
+                  <span className="font-semibold">{appointment.date}</span>
                 </p>
                 <p>
                   Hora:
-                  <span className="font-semibold">
-                    {appointment.time}
-                  </span>
+                  <span className="font-semibold">{appointment.time}</span>
                 </p>
-                <p className="py-2">
+                <p className="py-3">
                   Agendaste una sesión con el consultor Daniel del Valle
                 </p>
+                <div className="text-right">
+                  <BaseButton
+                    btnText="Cancelar"
+                    className="rounded-lg p-2 bg-red-500 text-white"
+                    onClick={() => showModal(appointment)}
+                  />
+                </div>
               </div>
             </div>
           ))}
+          {modalVisible && selectedAppointment && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-8 rounded max-w-md text-xl">
+                <h2 className="">
+                  Cancelar cita:
+                  <span className="text-red-500 font-medium">
+                    {selectedAppointment.name}
+                  </span>
+                </h2>
+                <p className="py-3 mb-8">
+                  ¿Estás seguro que quieres cancelar esta cita?
+                </p>
+                <p className="text-red-500 ">
+                  Una vez que realices esta accion no hay vuelta atrás
+                </p>
+                <div className="flex justify-around items-center my-4">
+                  <button
+                    onClick={closeModal}
+                    className="rounded-lg p-2 bg-slate-400 text-white"
+                  >
+                    Cerrar
+                  </button>
+                  <button
+                    className="rounded-lg p-2 bg-red-500 text-white"
+                    onClick={() =>
+                      handleDeleteAppointment(selectedAppointment.id)
+                    }
+                  >
+                    Si, eliminar
+                  </button>
+                </div>
+                {deletingAppointment && <Loader />}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -614,3 +680,37 @@ export default Profile;
             ))}
           </div> */
 }
+
+{
+  /* Modal */
+}
+//   {modalVisible && selectedService === service && (
+//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+//       <div className="bg-white p-8 rounded max-w-md text-xl">
+//         <h2 className="">
+//           Eliminar:
+//           <span className="text-red-500 font-medium">
+//             {appointment.name}
+//           </span>
+//         </h2>
+//         <p className="py-3 mb-8">
+//           ¿Estás seguro que quieres eliminar este servicio?
+//         </p>
+//         <div className="flex justify-around items-center my-4">
+//           <button
+//             onClick={closeModal}
+//             className="rounded-lg p-2 bg-slate-400 text-white"
+//           >
+//             Cerrar
+//           </button>
+//           <button
+//             className="rounded-lg p-2 bg-red-500 text-white"
+//             onClick={() => handleDeleteService(appointment.id)}
+//           >
+//             Si, eliminar
+//           </button>
+//         </div>
+//         {deletingService && selectedService === service && <Loader />}
+//       </div>
+//     </div>
+//   )}
