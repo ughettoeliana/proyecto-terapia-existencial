@@ -13,7 +13,9 @@ export const login = async (email, password) => {
       const result = await response.json();
       return result;
     } else {
+
       console.error("Login failed");
+      return response.status
     }
   } catch (error) {
     console.error("Error in API login function:", error);

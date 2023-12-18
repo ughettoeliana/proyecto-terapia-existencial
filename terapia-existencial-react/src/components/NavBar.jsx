@@ -9,15 +9,16 @@ const NavBar = () => {
   const [isLoggedUser, setIsLoggedUser] = useState(false);
   const authToken = localStorage.getItem("token");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     setIsLoggedUser(!!authToken);
-
-
+    if (authToken === undefined) {
+      console.log("authToken es undefined");
+    }
     if (authToken) {
       const tokenData = jwtDecode(authToken);
       if (authToken === undefined) {
-        console.log('authToken es undefined')
+        console.log("authToken es undefined");
       }
 
       if (tokenData && tokenData.userId) {
@@ -134,19 +135,23 @@ const NavBar = () => {
             </>
           ) : (
             <>
-              <BaseNavLi>
-                <Link to="/services" className="text-gray-500">
-                  Servicios
-                </Link>
-              </BaseNavLi>
-              <BaseNavLi>
-                <button
-                  onClick={handleLogout}
-                  className="text-white bg-black p-2 rounded-lg"
-                >
-                  Cerrar Sesión
-                </button>
-              </BaseNavLi>
+              {user.id && (
+                <>
+                  <BaseNavLi>
+                    <Link to="/services" className="text-gray-500">
+                      Servicios
+                    </Link>
+                  </BaseNavLi>
+                  <BaseNavLi>
+                    <button
+                      onClick={handleLogout}
+                      className="text-white bg-black p-2 rounded-lg"
+                    >
+                      Cerrar Sesión
+                    </button>
+                  </BaseNavLi>
+                </>
+              )}
             </>
           )}
         </ul>

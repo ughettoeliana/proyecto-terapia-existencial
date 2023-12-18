@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import BaseButton from "../components/BaseButton";
 import { useNavigate } from "react-router-dom";
-import { createAccount } from "../api/user";
+import { createAccount, login } from "../api/user";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -19,9 +19,10 @@ function Register() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await createAccount(email, password);
-      navigate("/login", { replace: true });
-      localStorage.setItem("token", result.token);
+       await createAccount(email, password);
+      const loggedUser = await login(email, password);
+      localStorage.setItem("token", loggedUser.token);
+      navigate("/services", { replace: true });
     } catch (error) {
       console.log(error);
     }

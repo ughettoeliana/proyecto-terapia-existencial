@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BaseButton from "../components/BaseButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/user";
 
 function Login() {
@@ -19,7 +19,7 @@ function Login() {
   const handleFormSubmit = async (e) => {
     try {
       e.preventDefault();
-      const result = await login(email, password, navigate);
+      const result = await login(email, password);
       localStorage.setItem("token", result.token);
       navigate("/services", { replace: true });
     } catch (error) {
@@ -57,6 +57,10 @@ function Login() {
                   required
                   className="border border-solid border-gray-300 rounded-md p-1"
                 />
+              </div>
+              <div>
+                <p>¿No tenés cuenta?</p>
+                <Link to='/register' className="text-primary">Registrate</Link>
               </div>
               <div className="my-5">
                 <BaseButton
