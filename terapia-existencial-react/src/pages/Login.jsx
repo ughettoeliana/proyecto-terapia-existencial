@@ -39,7 +39,7 @@ function Login() {
   };
 
   async function handleForgotPassword() {
-    navigate("/forgot-password", { replace: true })
+    navigate("/forgot-password", { replace: true });
   }
 
   return (
@@ -111,16 +111,12 @@ function Login() {
                   </p>
                 </div>
                 <div className="mt-3">
-                  <p>
-                    ¿Te olvidaste la contraseña?
-                    <br />
-                    <button
-                      onClick={handleForgotPassword}
-                      className="text-primary"
-                    >
-                      Olvidé mi contraseña
-                    </button>
-                  </p>
+                  <button
+                    onClick={handleForgotPassword}
+                    className="text-primary"
+                  >
+                    Olvidé mi contraseña
+                  </button>
                 </div>
               </div>
             </form>
