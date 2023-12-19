@@ -128,7 +128,7 @@ function SetAppointment() {
   }
 
   return (
-    <div className="flex flex-col justify-center max-h-screen">
+    <div className="flex flex-col justify-center my-5 py-5 min-h-screen">
       <h1 className="text-2xl self-center p-3 ">Agenda una cita</h1>
       <div className="flex justify-center my-4">
         <div>

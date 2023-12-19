@@ -20,6 +20,7 @@ import Profile from "./pages/Profile";
 import SetAppointment from "./pages/SetAppointment";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import SendEmail from "./pages/SendEmail";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+        <Route path="/send-email" element={<SendEmail />} />
         
         <Route
           path="/profile"

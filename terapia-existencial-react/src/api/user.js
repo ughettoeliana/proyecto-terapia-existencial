@@ -13,7 +13,7 @@ export const login = async (email, password) => {
       const result = await response.json();
       return result;
     } else {
-      return response.status
+      return response.status;
     }
   } catch (error) {
     console.error("Error in API login function:", error);
@@ -91,17 +91,14 @@ export const updateUser = async (editedUser, userId) => {
 
     if (response.ok) {
       const updatedUserData = await response.json();
-      console.log("updatedUserData", updatedUserData);
       return updatedUserData;
     } else {
-      console.error("Update user by id failed");
       console.error("result", response);
     }
   } catch (error) {
     console.error("Error in API getUserById function:", error);
   }
 };
-
 
 export const forgotPassword = async (email) => {
   try {
@@ -114,9 +111,7 @@ export const forgotPassword = async (email) => {
     });
 
     if (response.ok) {
-      console.log('response', response)
-      const result = response.json()
-      return result;
+      return { msg: "success" };
     } else {
       console.error("Account creation failed");
     }
@@ -136,7 +131,7 @@ export const resetPassword = async (password, id, token) => {
     });
 
     if (response.ok) {
-      const result = await response.json()
+      const result = await response.json();
       return result;
     } else {
       console.error("Change the password failed");

@@ -18,9 +18,9 @@ function ForgotPassword() {
     try {
       const oldUser = await forgotPassword(email);
       console.log("oldUser", oldUser);
-    //   if(oldUser.data === "Success") {
-    //     navigate('/login')
-    // }
+      if(oldUser.msg === "success") {
+        navigate('/send-email')
+    }
     } catch (error) {
       console.error("Error in forgotPassword fetch:", error);
       navigate("/not-found", { replace: true });

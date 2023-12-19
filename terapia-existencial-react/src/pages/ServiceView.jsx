@@ -16,8 +16,7 @@ function ServiceView() {
   const [serviceComments, setServiceComments] = useState([]);
   const { serviceId } = useParams();
   const navigate = useNavigate();
-  const [editMode, setEditMode] = useState(false);
-
+  const [commentMode, setCommentMode] = useState(false);
 
   const showComments = async () => {
     try {
@@ -30,9 +29,6 @@ function ServiceView() {
       console.error("Error in showComments:", error);
     }
   };
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,12 +57,11 @@ function ServiceView() {
 
   const handleScheduleAppointment = async (service) => {
     const serviceId = service._id;
-    navigate(`/services/${serviceId}/set-appointment`, {replace: true})
-
+    navigate(`/services/${serviceId}/set-appointment`, { replace: true });
   };
 
-  const toggleEditMode = () => {
-    setEditMode(true);
+  const toggleCommentMode = () => {
+    setCommentMode(true);
   };
 
   const getUserEmail = () => {
@@ -103,6 +98,7 @@ function ServiceView() {
       if (response) {
         showComments();
         setComment("");
+        setCommentMode(false)
       } else {
         console.error("Error al enviar el comentario");
       }
@@ -111,9 +107,7 @@ function ServiceView() {
     }
   };
 
-  useEffect(() => {
-  }, [serviceComments]);
-
+  useEffect(() => {}, [serviceComments]);
 
   return (
     <div>
@@ -138,14 +132,14 @@ function ServiceView() {
                   Agenda una sesión con el consultor Daniel del Valle
                 </p>
               </div>
-              {!editMode && (
+              {!commentMode && (
                 <div className="flex justify-between mt-4">
                   <BaseButton
                     onClick={() => handleScheduleAppointment(service)}
                     btnText="Agendar Cita"
                   />
                   <BaseButton
-                    onClick={toggleEditMode}
+                    onClick={toggleCommentMode}
                     className="self-end bg-slate-400"
                     btnText="Comentar"
                   />
@@ -153,7 +147,7 @@ function ServiceView() {
               )}
 
               <div className="flex flex-col">
-                {editMode && (
+                {commentMode && (
                   <form onSubmit={handleSubmitComment} className="my-5">
                     <div className="my-5">
                       <label htmlFor="comment">
@@ -172,7 +166,7 @@ function ServiceView() {
                       <BaseButton
                         type="button"
                         onClick={() => {
-                          setEditMode(false);
+                          setCommentMode(false);
                           setComment("");
                         }}
                         className="bg-slate-400 mb-3 px-5"
@@ -212,24 +206,22 @@ function ServiceView() {
                   </div>
                 </div>
               )} */}
-              {
-                serviceComments &&
-                serviceComments.length > 0 && (
-                  <div className="rounded-xl border border-solid border-slate-300 my-5 p-4">
-                    <h2 className="text-xl text-center">Comentarios</h2>
-                    {serviceComments
-                      .slice()
-                      .reverse()
-                      .map((comment, index) => (
-                        <div
-                          key={index}
-                          className="p-5 border-b border-solid border-slate-300 "
-                        >
-                          {comment.comment}
-                        </div>
-                      ))}
-                  </div>
-                )}
+              {serviceComments && serviceComments.length > 0 && (
+                <div className="rounded-xl border border-solid border-slate-300 my-5 p-4">
+                  <h2 className="text-xl text-center">Comentarios</h2>
+                  {serviceComments
+                    .slice()
+                    .reverse()
+                    .map((comment, index) => (
+                      <div
+                        key={index}
+                        className="p-5 border-b border-solid border-slate-300 "
+                      >
+                        {comment.comment}
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
