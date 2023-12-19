@@ -131,7 +131,7 @@ const CreateService = () => {
           <BaseButton
             loading={createServiceLoading}
             type="submit"
-            className="my-2"
+            className="my-2 bg-primary "
             btnText="Crear Servicio"
           />
         </form>

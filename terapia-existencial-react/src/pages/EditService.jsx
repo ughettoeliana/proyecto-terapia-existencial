@@ -159,7 +159,7 @@ const EditService = () => {
           <BaseButton
             loading={editServiceLoading}
             type="submit"
-            className="my-2"
+            className="my-2 bg-primary "
             btnText="Editar Servicio"
           />
         </form>

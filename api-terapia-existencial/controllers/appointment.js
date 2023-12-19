@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import appointmentSchema from "../schemas/appointment.js";
 import userSchema from "../schemas/user.js";
 import appointmentServices from "../services/appointment.js";
 
@@ -12,7 +14,9 @@ const createAppointment = async (req, res) => {
         time: appointmentData.time,
       },
     };
-    const createdAppointment = await appointmentServices.createAppointment(data);
+    const createdAppointment = await appointmentServices.createAppointment(
+      data
+    );
     res.status(201).json({ data: createdAppointment });
   } catch (error) {
     res
@@ -22,42 +26,70 @@ const createAppointment = async (req, res) => {
 };
 
 const getAppointment = async (req, res) => {
-    try {
-      const foundAppointments = await appointmentServices.getAppointment();
-      res.status(201).json({ data: foundAppointments });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ msg: "Error al traer la cita", error: error.message });
-    }
-  };
-
+  try {
+    const foundAppointments = await appointmentServices.getAppointment();
+    res.status(201).json({ data: foundAppointments });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al traer la cita", error: error.message });
+  }
+};
 
 const getAppointmentByUserId = async (req, res) => {
-    try {
-      const {userId} = req.params;
-      const foundAppointments = await appointmentServices.getAppointmentByUserId(userId);
-      res.status(201).json({ data: foundAppointments });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ msg: "Error al traer la cita", error: error.message });
+  try {
+    const { userId } = req.params;
+    const foundAppointments = await appointmentServices.getAppointmentByUserId(
+      userId
+    );
+    res.status(201).json({ data: foundAppointments });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al traer la cita", error: error.message });
+  }
+};
+
+const deleteAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteAppointment = await appointmentServices.deleteAppointment(id);
+    res.status(201).json({ data: deleteAppointment });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al eliminar el comentario", error: error.message });
+  }
+};
+
+const deleteUserAppointment = async (req, res) => {
+  try {
+    const { userId, appointmentId } = req.params;
+    const appointment = await appointmentSchema.findOne({
+      _id: new mongoose.Types.ObjectId(appointmentId),
+    });
+    console.log("userId", userId);
+    console.log("appointmentId", appointmentId);
+    console.log("appointment", appointment);
+    if (appointment.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
     }
-  };
 
+    const deleteAppointment = await appointmentServices.deleteAppointment(
+      appointmentId
+    );
+    res.status(201).json({ data: deleteAppointment });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al eliminar el comentario", error: error.message });
+  }
+};
 
-
-  const deleteAppointment = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const deleteAppointment = await appointmentServices.deleteAppointment(id);
-      res.status(201).json({ data: deleteAppointment });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ msg: "Error al eliminar el comentario", error: error.message });
-    }
-  };
-
-
-export default { createAppointment, getAppointment, getAppointmentByUserId,deleteAppointment };
+export default {
+  createAppointment,
+  getAppointment,
+  getAppointmentByUserId,
+  deleteAppointment,
+  deleteUserAppointment,
+};

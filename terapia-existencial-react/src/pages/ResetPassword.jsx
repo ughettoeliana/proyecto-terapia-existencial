@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BaseButton from "../components/BaseButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../api/user";
+import Notification from "../components/Notification";
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -38,7 +39,6 @@ function ResetPassword() {
         return;
       }
       const oldUser = await resetPassword(validPassword, id, token);
-      console.log("oldUser", oldUser);
       if (oldUser.msg === "success") {
         navigate("/login");
       }
@@ -80,31 +80,11 @@ function ResetPassword() {
                 />
               </div>
               {notification && (
-                <div
-                  className={`p-2 rounded max-w-md${
-                    notification.message !== null
-                      ? notification.type === "success"
-                        ? " bg-green-200 rounded-xl"
-                        : " bg-red-200 rounded-xl"
-                      : ""
-                  }`}
-                >
-                  <p
-                    className={`${
-                      notification.message !== null
-                        ? notification.message === "success"
-                          ? "text-green-500 "
-                          : "text-red-500"
-                        : ""
-                    }`}
-                  >
-                    {notification.message}
-                  </p>
-                </div>
+                <Notification notification={notification}/>
               )}
               <div className="my-5">
                 <BaseButton
-                  className="w-full"
+                  className="w-full bg-primary "
                   type="submit"
                   btnText="Cambiar Contraseña"
                 />

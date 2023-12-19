@@ -135,6 +135,7 @@ function ServiceView() {
               {!commentMode && (
                 <div className="flex justify-between mt-4">
                   <BaseButton
+                  className='bg-primary'
                     onClick={() => handleScheduleAppointment(service)}
                     btnText="Agendar Cita"
                   />
@@ -174,7 +175,7 @@ function ServiceView() {
                       ></BaseButton>
                       <BaseButton
                         type="submit"
-                        className="mb-2 px-5"
+                        className="mb-2 px-5 bg-primary"
                         btnText="Enviar"
                       ></BaseButton>
                     </div>

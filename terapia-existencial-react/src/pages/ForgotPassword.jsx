@@ -48,7 +48,7 @@ function ForgotPassword() {
               </div>
               <div className="my-5">
                 <BaseButton
-                  className="w-full"
+                  className="w-full bg-primary "
                   type="submit"
                   btnText="Continuar"
                 />

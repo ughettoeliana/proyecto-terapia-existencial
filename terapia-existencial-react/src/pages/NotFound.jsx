@@ -13,7 +13,7 @@ function NotFound() {
         <h1 className='text-3xl'>404 Página no encontrada</h1>
         <p className='text-2xl'>Lo sentimos,vuelve al inicio</p>
         <br/>
-        <BaseButton btnText="Volver atrás" onClick={goBack} />
+        <BaseButton className='bg-primary ' btnText="Volver atrás" onClick={goBack} />
       </div>
     </div>
   )

@@ -61,7 +61,7 @@ function Register() {
               </div>
               <div className="my-5">
                 <BaseButton
-                  className="w-full"
+                  className="w-full bg-primary "
                   type="submit"
                   btnText="Iniciar Sesión"
                 />

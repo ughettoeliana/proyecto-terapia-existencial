@@ -16,7 +16,7 @@ function Unauthorized() {
         </h1>
         <p className="text-2xl">Lo sentimos</p>
         <br/>
-        <BaseButton btnText="Volver atrás" onClick={goBack} />
+        <BaseButton className='bg-primary ' btnText="Volver atrás" onClick={goBack} />
       </div>
     </div>
   );

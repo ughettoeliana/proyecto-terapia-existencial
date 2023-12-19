@@ -68,6 +68,7 @@ function Services() {
                             Agenda una sesión con el consultor Daniel del Valle
                           </p>
                           <BaseButton
+                          className='bg-primary '
                             btnText="Más acciones"
                             onClick={() => handleRedirect(service)}
                           />

@@ -13,7 +13,7 @@ route.post(
 route.get("/appointments", appointmentController.getAppointment);
 route.get('/appointments/:userId', appointmentController.getAppointmentByUserId)
 
-route.delete('/appointment/:id', appointmentController.deleteAppointment)
+route.delete('/appointment/:userId/:appointmentId', appointmentController.deleteUserAppointment)
 
 //trae un comentario por id
 //route.get('/feedback/:id', feedbackController.getFeedbackById)

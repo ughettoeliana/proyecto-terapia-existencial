@@ -13,16 +13,7 @@ export const createAppointment = async (userId, serviceId, appointmentData) => {
         appointmentData,
       }),
     });
-    console.log(
-      JSON.stringify({
-        userId,
-        serviceId,
-        appointmentData: {
-          date: appointmentData.date,
-          time: appointmentData.time,
-        },
-      })
-    );
+    
     if (response.ok) {
       const result = await response.json();
       return result;
@@ -58,15 +49,14 @@ export const getAppointmentByUserId = async (userId) => {
     }
   };
 
-  export const deleteAppointment = async (appointmentId) => {
+  export const deleteAppointment = async (userId, appointmentId) => {
     try {
-      const response = await fetch(`${apiUrl}/appointment/${appointmentId}`, {
+      const response = await fetch(`${apiUrl}/appointment/${userId}/${appointmentId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
-  
       if (!response.ok) {
         throw new Error(`Failed to delete appointment with ID ${appointmentId}`);
       }

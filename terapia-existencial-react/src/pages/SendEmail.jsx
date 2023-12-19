@@ -14,6 +14,7 @@ function SendEmail() {
         <p className="text-2xl">
           Hace click en el link que te enviamos para continuar
         </p>
+        <BaseButton className='bg-primary ' btnText='Volver atrás' onClick={goBack} />
         <br />
       </div>
     </div>

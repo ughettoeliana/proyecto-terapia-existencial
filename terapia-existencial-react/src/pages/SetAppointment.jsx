@@ -3,6 +3,7 @@ import BaseButton from "../components/BaseButton";
 import { createAppointment } from "../api/appointment";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Notification from "../components/Notification";
 
 const DateTimePicker = ({ onDateChange, onTimeChange }) => {
   const [selectedDate, setSelectedDate] = useState({ date: "" });
@@ -28,13 +29,13 @@ const DateTimePicker = ({ onDateChange, onTimeChange }) => {
       timeOptions.push(`${formattedHour}:${formattedMinute}`);
     }
   }
-
   return (
     <>
       <div className="mb-3 flex items-start">
         <div className="mx-4">
           <label>Fecha: </label>
           <input
+            required
             type="date"
             value={selectedDate}
             onChange={handleDateChange}
@@ -44,6 +45,7 @@ const DateTimePicker = ({ onDateChange, onTimeChange }) => {
         <div>
           <label>Hora: </label>
           <select
+            required
             value={selectedTime}
             onChange={handleTimeChange}
             className="border border-solid border-gray-300 rounded-md p-1"
@@ -64,14 +66,11 @@ function SetAppointment() {
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationModalVisible, setNotificationModalVisible] =
     useState(false);
-  const [selectedDate, setSelectedDate] = useState({ date: "" });
-  const [selectedTime, setSelectedTime] = useState({ hour: "" });
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const serviceId = useParams();
   const navigate = useNavigate();
-  const [notification, setNotification] = useState({
-    message: null,
-    type: null,
-  });
+  const [notification, setNotification] = useState(null);
 
   const authToken = localStorage.getItem("token");
   if (!authToken) {
@@ -90,6 +89,14 @@ function SetAppointment() {
   };
 
   function showModal() {
+    if (!selectedDate || !selectedTime) {
+      setNotification({
+        message: "Debes seleccionar una fecha y hora para la cita",
+        type: "error",
+      });
+      return;
+    }
+
     setModalVisible(true);
   }
 
@@ -138,11 +145,14 @@ function SetAppointment() {
           />
         </div>
       </div>
+
+      {notification && <Notification notification={notification} />}
+
       <div className="max-w-2xl text-center mx-auto py-5">
         <BaseButton
           btnText="Continuar"
           onClick={showModal}
-          className="w-full"
+          className="w-full bg-primary "
         />
       </div>
 
@@ -177,34 +187,20 @@ function SetAppointment() {
 
       {notificationModalVisible && notification && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div
-            className={` p-8 rounded max-w-md text-xl${
-              notification.message !== null
-                ? notification.type === "success"
-                  ? "text-green-500 bg-green-200 rounded-xl"
-                  : "text-red-500 bg-red-200 rounded-xl"
-                : ""
-            }`}
-          >
-            <div
-              className={`flex justify-around items-center max-w-lg text-center p-2 mx-auto text-lg ${
-                notification.message !== null
-                  ? notification.type === "success"
-                    ? "text-green-500 bg-green-200 rounded-xl"
-                    : "text-red-500 bg-red-200 rounded-xl"
-                  : ""
-              }`}
-            >
-              {notification.message}
+          <div className={`p-2 rounded-xl max-w-md${
+                notification.type === "success"
+                  ? " bg-green-200"
+                  : " bg-red-200"
+              }`}>
+            <Notification notification={notification} />
+            <div className="text-right">
+              <BaseButton
+              onClick={goToServices}
+              className='bg-green-500'
+              btnText="Cerrar"
+            />
             </div>
-            <div className="flex justify-around items-center my-4">
-              <button
-                onClick={goToServices}
-                className="rounded-lg p-2 bg-green-500 text-white"
-              >
-                Cerrar
-              </button>
-            </div>
+            
           </div>
         </div>
       )}

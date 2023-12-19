@@ -12,6 +12,7 @@ import {
   getAppointmentByUserId,
 } from "../api/appointment.js";
 import { getServiceDetails } from "../api/service";
+import Notification from "../components/Notification.jsx";
 
 // Appointments component
 function Appointments({ user }) {
@@ -19,7 +20,7 @@ function Appointments({ user }) {
   const [appointments, setAppointments] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [deletingAppointment, setDeletingAppointment] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -29,28 +30,26 @@ function Appointments({ user }) {
       }
 
       const foundAppointments = await getAppointmentByUserId(user.id);
+      const appointmentsWithServiceData = [];
 
-      const appointmentsWithServiceData = await Promise.all(
-        foundAppointments.map(async (appointment) => {
-          if (appointment.serviceId) {
-            const serviceData = await getServiceDetails(appointment.serviceId);
-            return {
-              id: appointment._id,
-              userId: appointment.userId,
-              date: appointment.appointmentData.date,
-              time: appointment.appointmentData.time,
-              name: serviceData.name,
-              duration: serviceData.time,
-              price: serviceData.price,
-              modality: serviceData.modality,
-              serviceId: serviceData._id,
-            };
-          } else {
-            return null;
-          }
-        })
-      );
-      setAppointments(appointmentsWithServiceData.filter(Boolean));
+      for (const appointment of foundAppointments) {
+        if (appointment.serviceId) {
+          const serviceData = await getServiceDetails(appointment.serviceId);
+          appointmentsWithServiceData.push({
+            id: appointment._id,
+            userId: appointment.userId,
+            date: appointment.appointmentData.date,
+            time: appointment.appointmentData.time,
+            name: serviceData.name,
+            duration: serviceData.time,
+            price: serviceData.price,
+            modality: serviceData.modality,
+            serviceId: serviceData._id,
+          });
+        }
+      }
+
+      setAppointments(appointmentsWithServiceData);
       setAppointmentsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -67,18 +66,21 @@ function Appointments({ user }) {
   };
 
   const closeModal = () => {
-    setModalVisible(false);
     setSelectedAppointment(null);
+    setModalVisible(false);
   };
 
   const handleDeleteAppointment = async (appointmentId) => {
     try {
-      setDeletingAppointment(true);
-      await deleteAppointment(appointmentId);
+      await deleteAppointment(user.id, appointmentId);
       setModalVisible(false);
       fetchData();
-    } finally {
-      setDeletingAppointment(false);
+    } catch (error) {
+      setModalVisible(false);
+      setNotification({
+        msg: "Hubo un error al intentar cancelar la cita, lo sentimos. Intentelo de nuevo más tarde",
+        type: "error",
+      });
     }
   };
   return (
@@ -117,11 +119,13 @@ function Appointments({ user }) {
                   Agendaste una sesión con el consultor Daniel del Valle
                 </p>
                 <div className="text-right">
-                  <BaseButton
-                    btnText="Cancelar"
-                    className="rounded-lg p-2 bg-red-500 text-white"
-                    onClick={() => showModal(appointment)}
-                  />
+                  {appointment.userId === user.id && (
+                    <BaseButton
+                      btnText="Cancelar"
+                      className="rounded-lg p-2 bg-red-500 text-white"
+                      onClick={() => showModal(appointment)}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -157,12 +161,12 @@ function Appointments({ user }) {
                     Si, eliminar
                   </button>
                 </div>
-                {deletingAppointment && <Loader />}
               </div>
             </div>
           )}
         </div>
       )}
+      {notification && <Notification notification={notification} />}
     </div>
   );
 }
@@ -175,12 +179,6 @@ function EditUser({
   editedUser,
   setEditedUser,
 }) {
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   await handleUpdateUser();
-  // };
-
   return (
     <div className="flex flex-col">
       <form onSubmit={handleUpdateUser} className="my-5">
@@ -223,7 +221,11 @@ function EditUser({
             className="bg-slate-400 mb-3 px-5"
             btnText="Cerrar"
           />
-          <BaseButton btnText="Guardar" className="mb-3 px-5" type="submit" />
+          <BaseButton
+            btnText="Guardar"
+            className="mb-3 px-5 bg-primary "
+            type="submit"
+          />
         </div>
       </form>
     </div>
@@ -349,7 +351,7 @@ function Profile() {
             </div>
             {!editMode && (
               <BaseButton
-                className="px-10 my-2"
+                className="px-10 my-2 bg-primary "
                 onClick={toggleEditMode}
                 btnText="Editar mi perfil"
               />
@@ -371,6 +373,4 @@ function Profile() {
   );
 }
 
-
 export default Profile;
-

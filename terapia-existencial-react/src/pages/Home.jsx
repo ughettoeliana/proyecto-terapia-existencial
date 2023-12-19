@@ -4,7 +4,6 @@ import { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import BaseButton from "../components/BaseButton";
 import { Link } from "react-router-dom";
 
-
 const Home = () => {
   return (
     <>
@@ -203,7 +202,7 @@ const Home = () => {
 
           <div className="container ml-auto mr-auto flex items-center justify-center">
             <div className="w-full md:w-1/2">
-              <form className="bg-white px-8 pt-6 pb-8 mb-4" >
+              <form className="bg-white px-8 pt-6 pb-8 mb-4">
                 <div className="mb-4">
                   <div className="grid grid-flow-row sm:grid-flow-col gap-3">
                     <div className="sm:col-span-4 justify-center">
@@ -255,7 +254,11 @@ const Home = () => {
                   ></textarea>
                 </div>
                 <div className="flex items-center justify-between">
-                  <BaseButton btnText="Enviar" type="submit">
+                  <BaseButton
+                    btnText="Enviar"
+                    type="submit"
+                    className="bg-primary"
+                  >
                     <FontAwesomeIcon
                       icon={faPaperPlane}
                       style={{ color: "#ffffff" }}
