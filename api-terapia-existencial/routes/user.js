@@ -18,6 +18,10 @@ route.get("/user/:id", userController.getUserById);
 route.put("/user/:id", userController.updateUser);
 route.delete("/user/:id", userController.deleteUser);
 
+route.post("/forgot-password", accountController.forgotPassword);
+route.post("/reset-password/:id/:token", accountController.resetPassword);
+//route.post("/reset-password/:id/:token", accountController.createNewPassword);
+
 export default route;
 
 //CRUD of the users

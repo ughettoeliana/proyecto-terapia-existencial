@@ -13,8 +13,6 @@ export const login = async (email, password) => {
       const result = await response.json();
       return result;
     } else {
-
-      console.error("Login failed");
       return response.status
     }
   } catch (error) {
@@ -101,5 +99,49 @@ export const updateUser = async (editedUser, userId) => {
     }
   } catch (error) {
     console.error("Error in API getUserById function:", error);
+  }
+};
+
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await fetch(`${apiUrl}/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      console.log('response', response)
+      const result = response.json()
+      return result;
+    } else {
+      console.error("Account creation failed");
+    }
+  } catch (error) {
+    console.error("Error in API createAccount function:", error);
+  }
+};
+
+export const resetPassword = async (password, id, token) => {
+  try {
+    const response = await fetch(`${apiUrl}/reset-password/${id}/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password }),
+    });
+
+    if (response.ok) {
+      const result = await response.json()
+      return result;
+    } else {
+      console.error("Change the password failed");
+    }
+  } catch (error) {
+    console.error("Error in API createAccount function:", error);
   }
 };

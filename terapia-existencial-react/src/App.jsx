@@ -18,6 +18,8 @@ import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import Unauthorized from "./pages/Unauthorized";
 import Profile from "./pages/Profile";
 import SetAppointment from "./pages/SetAppointment";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -29,7 +31,9 @@ function App() {
         <Route path="/about" element={<AboutMe />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+        
         <Route
           path="/profile"
           element={
@@ -62,6 +66,7 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/panel"
           element={

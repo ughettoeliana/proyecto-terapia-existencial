@@ -21,7 +21,7 @@ function Services() {
           setServices(data);
           setServicesLoading(false);
         }else {
-          navigate('/iniciar-sesion',{replace: true})
+          navigate('/login',{replace: true})
         }
       } catch (error) {
         console.error("Error in useEffect for fetching services:", error);
