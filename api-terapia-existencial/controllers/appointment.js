@@ -68,9 +68,7 @@ const deleteUserAppointment = async (req, res) => {
     const appointment = await appointmentSchema.findOne({
       _id: new mongoose.Types.ObjectId(appointmentId),
     });
-    console.log("userId", userId);
-    console.log("appointmentId", appointmentId);
-    console.log("appointment", appointment);
+   
     if (appointment.userId.toString() !== userId) {
       return res.status(403).json({ message: "Unauthorized" });
     }

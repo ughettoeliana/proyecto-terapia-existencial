@@ -38,7 +38,7 @@ async function fetchUserData(userId) {
       fetchData();
     }, []);
   
-    if (userData && userData.rol === 'user') {
+    if (!userData || userData.rol === 'user') {
       return <Navigate to={'/unauthorized'} replace={true} />;
     }
   
