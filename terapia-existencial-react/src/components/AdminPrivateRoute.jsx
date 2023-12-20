@@ -44,27 +44,5 @@ async function fetchUserData(userId) {
   
     return <>{children}</>;
   }
-  
-
-
-
-// async function AdminPrivateRoute({children}){
-//    const authToken = localStorage.getItem("token");
-
-//   if(!authToken){
-//     return <Navigate to={'/login'} replace={true} />
-//   } 
-
-//   if(authToken){
-//     const tokenData = jwtDecode(authToken);
-//     const userData = await getUserById(tokenData.userId);
-//     console.log('userData', userData.data.rol)
-//     if(userData.data.rol == 'user'){
-//         return <Navigate to={'/unauthorized'} replace={true} />
-//     }
-//   }
-
-//   return children ?? null
-// }
 
 export default AdminPrivateRoute;
