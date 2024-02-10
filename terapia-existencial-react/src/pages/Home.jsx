@@ -21,7 +21,7 @@ const Home = () => {
           </div>
           <div className="flex justify-center items-center text-sm">
             <Link
-              to="/servicios"
+              to="/services"
               className="text-white bg-primary rounded-lg p-2"
             >
               Agendar una consulta

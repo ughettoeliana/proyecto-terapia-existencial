@@ -11,8 +11,13 @@ import appointmentRoute from "./routes/appointment.js";
 //import AccountRoute from './routes/account.js';
 
 const app = express();
-app.use(cors());
-//app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
+app.use(
+  cors({
+    origin: ["https://deploy-mern-lwhq.vercel.app"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use("/api", userRoute);
@@ -21,7 +26,7 @@ app.use("/api", feedbackRoute);
 app.use("/api", appointmentRoute);
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect('mongodb+srv://elianaughetto:elianaughetto12122001@cluster0.pdr7igi.mongodb.net/test?retryWrites=true&w=majority')
   .then(() => {
     console.log("connected to mongodb atlas");
   })
