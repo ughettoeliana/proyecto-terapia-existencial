@@ -3,7 +3,6 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Services from "./pages/Services";
-// import SelectDate from "./pages/SelectDate";
 import ServiceView from "./pages/ServiceView";
 import NotFound from "./pages/NotFound";
 import Footer from "./components/Footer";
